@@ -1,66 +1,49 @@
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ZeroBudget.Features.Budgets;
 
-public class BudgetEntry
-{
-    public string Name { get; set; }
-    public decimal Amount { get; set; }
-
-    public BudgetEntry(string name, decimal amount)
-    {
-        Name = name;
-        Amount = amount;
-    }
-
-    public BudgetEntry()
-    {
-        
-    }
-}
-
-public class Entries
-{
-    public List<BudgetEntry> IncomeEntries { get; set; } = [];
-}
-
 public class CreateModel : PageModel
 {
-    // public HashSet<BudgetEntry> IncomeEntries { get; set; } = [];
-    [BindProperty(SupportsGet = true)]
-    public Entries Entries { get; set; } //= new();
+    [BindProperty]
+    public BudgetDefinition BudgetDefinition { get; set; } = default!;
+    public string? ErrorMessage { get; set; } = null;
 
     public void OnGet()
     {
-        Entries.IncomeEntries.Add(new BudgetEntry("Salary", 0m));
-        Entries.IncomeEntries.Add(new BudgetEntry("Side hustle", 0m));
+        BudgetDefinition = new BudgetDefinition();
     }
 
-    public void OnPost(Entries entries)
+    public IActionResult OnPost()
     {
-        var test = this.Entries;
-        // Do nothing
-        // Entries.IncomeEntries[0] = Entries.IncomeEntries[0] with { Amount = 1000m };
-        // if (!ModelState.IsValid)
-        // {
-        //     return;
-        // }
+        if (!ModelState.IsValid)
+        {
+            ErrorMessage = "Invalid budget definition.";
+            return Page();
+        }
 
-        // // Save the budget to the database
+        // ErrorMessage = "Test";
 
-        // return;
+        // Save the budget to the database
+
+        // Redirect to the budget details page
+        // return RedirectToPage("Details", new { id = budgetDefinition.Id });
+        return RedirectToPage("Details");
     }
+}
 
-    // public Task OnPostAsync()
-    // {
-    //     if (!ModelState.IsValid)
-    //     {
-    //         return Task.CompletedTask;
-    //     }
+public sealed class BudgetDefinition
+{
+    [Required]
+    [StringLength(100, ErrorMessage = "Name cannot be longer than 100 characters.")]
+    [Display(Name = "Budget Name")]
+    [DataType(DataType.Text)]
+    [RegularExpression(@"^[a-zA-Z0-9\s]+$", ErrorMessage = "Name can only contain letters, numbers, and spaces.")]
+    public string Name { get; set; } = string.Empty;
 
-    //     // Save the budget to the database
-
-    //     return Task.CompletedTask;
-    // }
+    public BudgetDefinition()
+    {
+        
+    }
 }

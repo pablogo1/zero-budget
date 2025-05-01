@@ -3,63 +3,26 @@
 @{
 }
 <h2>Create Budget</h2>
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @Model.ErrorMessage
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
 <form method="post" asp-antiforgery="true">
-    <h3>Income</h3>
-    <table class="table table-striped mt-4">
-        <thead>
-            <tr>
-                <th class="col-7">Category</th>
-                <th class="col-4">Amount</th>
-                <th class="col-1">&nbsp;</th>
-            </tr>
-        </thead>
-        <tbody>
-            @* @foreach (var category in Model.Entries.IncomeEntries) *@
-            @for (int i = 0; i < Model.Entries.IncomeEntries.Count(); i++)
-            {
-                <tr>
-                    <td>@Model.Entries.IncomeEntries[i].Name</td>
-                    <td>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">$</span>
-                            <input type="number" class="form-control" asp-for="@Model.Entries.IncomeEntries[i].Amount" />
-                        </div>
-                    </td>
-                    <td class="align-middle">
-                        <div class="input-group mb-3">
-                            <button type="button" class="btn btn-danger" onclick="deleteRow(this)">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
-                        </div>
-
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-    <button type="button" class="btn btn-secondary" onclick="addRow('income')">
-        <i class="fas fa-plus"></i> Add Income Category
-    </button>
-    <h3>Expenses</h3>
+    <div class="mb-3">
+        <label asp-for="BudgetDefinition.Name" class="form-label"></label>
+        <input asp-for="BudgetDefinition.Name" class="form-control" />
+        <span asp-validation-for="BudgetDefinition.Name" class="text-danger"></span>
+    </div>
     <button type="submit" class="btn btn-primary">
-        <i class="fas fa-plus"></i> Save
+        Save
     </button>
+    <button type="button" class="btn btn-secondary" onclick="Cancel()">Cancel</button>
 </form>
 <script>
-
-    function addRow(type) {
-        var table = document.querySelector('table');
-        var row = table.insertRow(-1);
-        var cell1 = row.insertCell(0);
-        var cell2 = row.insertCell(1);
-        var cell3 = row.insertCell(2);
-        cell1.innerHTML = '<input type="text" class="form-control" />';
-        cell2.innerHTML = '<div class="input-group mb-3"><span class="input-group-text">$</span><input type="number" class="form-control" /></div>';
-        cell3.innerHTML = '<button type="button" class="btn btn-danger" onclick="deleteRow(this)"><i class="fas fa-trash-alt"></i></button>' +
-            `<input type="hidden" value="${table.rows.length}"/>`;
-    }
-    function deleteRow(button) {
-        var row = button.closest('tr');
-        row.remove();
+    function Cancel() {
+        window.location.href = '@Url.Page("Index")';
     }
 </script>
