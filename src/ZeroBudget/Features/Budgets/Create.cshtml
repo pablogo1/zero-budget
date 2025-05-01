@@ -16,6 +16,26 @@
         <input asp-for="BudgetDefinition.Name" class="form-control" />
         <span asp-validation-for="BudgetDefinition.Name" class="text-danger"></span>
     </div>
+    <div class="mb-3">
+        <label asp-for="BudgetDefinition.Month" class="form-label"></label>
+        <select asp-for="BudgetDefinition.Month" class="form-select">
+            @foreach (var month in Model.Months)
+            {
+                <option value="@month.Number">@month.Name</option>
+            }
+        </select>
+        <span asp-validation-for="BudgetDefinition.Month" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="BudgetDefinition.Year" class="form-label"></label>
+        <select asp-for="BudgetDefinition.Year" class="form-select">
+            @for (int i = DateTime.Now.Year; i <= DateTime.Now.Year + 10; i++)
+            {
+                <option value="@i">@i</option>
+            }
+        </select>
+        <span asp-validation-for="BudgetDefinition.Year" class="text-danger"></span>
+    </div>
     <button type="submit" class="btn btn-primary">
         Save
     </button>
