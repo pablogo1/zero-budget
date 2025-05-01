@@ -7,14 +7,14 @@ namespace ZeroBudget.Features.Budgets;
 public class CreateModel : PageModel
 {
     [BindProperty]
-    public BudgetDefinition BudgetDefinition { get; set; } = default!;
+    public BudgetHeader BudgetDefinition { get; set; } = default!;
     public string? ErrorMessage { get; set; } = null;
 
     public Month[] Months { get; } = Month.Months;
 
     public void OnGet()
     {
-        BudgetDefinition = new BudgetDefinition();
+        BudgetDefinition = new BudgetHeader();
     }
 
     public IActionResult OnPost()
@@ -31,11 +31,11 @@ public class CreateModel : PageModel
 
         // Redirect to the budget details page
         // return RedirectToPage("Details", new { id = budgetDefinition.Id });
-        return RedirectToPage("Details");
+        return RedirectToPage("Details", new { id = 1 });
     }
 }
-
-public sealed class BudgetDefinition
+    
+public sealed class BudgetHeader
 {
     [Required]
     [StringLength(100, ErrorMessage = "Name cannot be longer than 100 characters.")]
@@ -55,27 +55,10 @@ public sealed class BudgetDefinition
     public int Year { get; set; } = DateTime.Today.Year;
 
 
-    public BudgetDefinition()
+    public BudgetHeader()
     {
         
     }
 }
 
-public record Month(int Number, string Name)
-{
-    public static Month[] Months =>
-    [
-        new Month(1, "January"),
-        new Month(2, "February"),
-        new Month(3, "March"),
-        new Month(4, "April"),
-        new Month(5, "May"),
-        new Month(6, "June"),
-        new Month(7, "July"),
-        new Month(8, "August"),
-        new Month(9, "September"),
-        new Month(10, "October"),
-        new Month(11, "November"),
-        new Month(12, "December")
-    ];
-}
+

@@ -14,7 +14,7 @@ public partial class CreateModelTests
             // Arrange
             var model = new CreateModel
             {
-                BudgetDefinition = new BudgetDefinition()
+                BudgetDefinition = new BudgetHeader()
                 {
                     Name = "Test Budget"
                 }
@@ -26,6 +26,7 @@ public partial class CreateModelTests
             // Assert
             model.ErrorMessage.ShouldBeNull();
             pageResponse.ShouldBeAssignableTo<RedirectToPageResult>();
+            (pageResponse as RedirectToPageResult)!.RouteValues.ShouldNotBeEmpty();
         }
 
         [Fact]
@@ -34,7 +35,7 @@ public partial class CreateModelTests
             // Arrange
             var model = new CreateModel
             {
-                BudgetDefinition = new BudgetDefinition()
+                BudgetDefinition = new BudgetHeader()
                 {
                     Name = "#$@#__!$error"
                 }
