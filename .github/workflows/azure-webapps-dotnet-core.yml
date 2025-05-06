@@ -30,10 +30,11 @@ on:
   workflow_dispatch:
 
 permissions:
+  id-token: write
   contents: read
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -61,29 +62,8 @@ jobs:
       - name: dotnet publish
         run: dotnet publish src/ZeroBudget -c Release -o ./zerobudget-app
 
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ env.AZURE_WEBAPP_NAME }}
-          path: ./zerobudget-app
-
-  deploy:
-    permissions:
-      id-token: write
-      contents: read
-    runs-on: ubuntu-latest
-    needs: build
-    # environment:
-    #   name: 'Development'
-    #   url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-
-    steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v4
-        with:
-          name: ${{ env.AZURE_WEBAPP_NAME }}
-
-      - uses: azure/login@v2
+      - name: Login to Azure
+        uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
@@ -96,7 +76,7 @@ jobs:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           package: ./zerobudget-app
 
-      - name: logout
+      - name: Logout from Azure
         run: |
           echo "Logging out from Azure"
           az logout
