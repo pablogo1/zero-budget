@@ -65,13 +65,13 @@ jobs:
         run: dotnet test --configuration Release --no-build
 
       - name: dotnet publish
-        run: dotnet publish -c Release --property:PublishDir='${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'
+        run: dotnet publish -c Release --property:PublishDir='/zerobudget-app'
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
-          name: .net-app
-          path: ${{ env.ZURE_WEBAPP_PACKAGE_PATH }}/myapp
+          name: ${{ env.AZURE_WEBAPP_NAME }}
+          path: /zerobudget-app
 
   deploy:
     permissions:
@@ -86,7 +86,7 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
-          name: .net-app
+          name: ${{ env.AZURE_WEBAPP_NAME }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
