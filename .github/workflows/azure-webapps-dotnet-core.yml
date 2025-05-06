@@ -65,7 +65,7 @@ jobs:
         run: dotnet test --configuration Release --no-build
 
       - name: dotnet publish
-        run: dotnet publish -c Release --property:PublishDir='./zerobudget-app'
+        run: dotnet publish -c Release -o ./zerobudget-app
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
