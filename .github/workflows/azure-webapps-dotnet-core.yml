@@ -96,4 +96,6 @@ jobs:
           package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp
 
       - name: logout
-        uses: azure/logout@v1
+        run: |
+          echo "Logging out from Azure"
+          az logout
