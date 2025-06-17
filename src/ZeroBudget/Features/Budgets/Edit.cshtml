@@ -1,0 +1,175 @@
+﻿@page "{key}"
+@model ZeroBudget.Features.Budgets.EditModel
+@{
+}
+
+<h2>@Model.Budget.BudgetName</h2>
+<form method="post">
+    <input type="hidden" name="Budget.BudgetKey" value="@Model.Budget.BudgetKey" />
+    <input type="hidden" name="Budget.BudgetName" value="@Model.Budget.BudgetName" />
+    <div class="p-3 mb-3 bg-light border rounded d-flex flex-row-reverse">
+        <div class="p-2">
+            <button type="submit" class="btn btn-success" asp-page-handler="Save" value="Save" asp-route-itemid="@Model.Budget.BudgetKey">Save Changes</button>
+        </div>
+        <div class="p-2">
+            <a class="btn btn-primary" asp-page="./View" asp-route-key="@Model.Budget.BudgetKey">View Budget</a>
+        </div>
+        <div class="p-2">
+            <a class="btn btn-secondary" asp-page="./Index">Back to List</a>
+        </div>
+    </div>
+
+    <h3>Income</h3>
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2">
+                &nbsp;
+            </div>
+            <div class="col text-center fs-5">
+                <strong>Planned Amount</strong>
+            </div>
+        </div>
+        @for (int incomeIndex = 0; incomeIndex < Model.Budget.IncomeItems.Count; incomeIndex++)
+        {
+            var income = Model.Budget.IncomeItems[incomeIndex];
+            <div class="row">
+                <div class="col-md-2 text-md-end fs-5">
+                    <input type="hidden" asp-for="Budget.IncomeItems[incomeIndex].Id" />
+                    <input type="hidden" asp-for="Budget.IncomeItems[incomeIndex].CategoryId" />
+                    <input type="hidden" asp-for="Budget.IncomeItems[incomeIndex].CategoryName" />
+                    @income.CategoryName
+                </div>
+                <div class="col">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">$</span>
+                        <input type="number" class="form-control" asp-for="Budget.IncomeItems[incomeIndex].PlannedAmount" />
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="row">
+            <div class="p-3 mb-3 d-flex flex-row-reverse">
+                <div class="p-2">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#addIncomeModal">
+                        <i class="bi bi-plus-circle"></i>
+                        Add Income Item
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 text-md-end fs-5">
+                <strong>Total</strong>
+            </div>
+            <div class="col">
+                <div class="input-group mb-3">
+                    <span class="input-group-text">$</span>
+                    <input type="number" class="form-control" name="TotalPlannedIncome" value="@Model.Budget.TotalIncome" disabled />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h3>Expenses</h3>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2">
+                &nbsp;
+            </div>
+            <div class="col text-center fs-5">
+                <strong>Planned Amount</strong>
+            </div>
+        </div>
+        @for (int expenseIndex = 0; expenseIndex < Model.Budget.ExpenseItems.Count; expenseIndex++)
+        {
+            var expense = Model.Budget.ExpenseItems[expenseIndex];
+            <div class="row">
+                <div class="col-md-2 text-md-end fs-5">
+                    <input type="hidden" asp-for="Budget.ExpenseItems[expenseIndex].Id" />
+                    <input type="hidden" asp-for="Budget.ExpenseItems[expenseIndex].CategoryId" />
+                    <input type="hidden" asp-for="Budget.ExpenseItems[expenseIndex].CategoryName" />
+                    @expense.CategoryName
+                </div>
+                <div class="col">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">$</span>
+                        <input type="number" class="form-control" asp-for="Budget.ExpenseItems[expenseIndex].PlannedAmount" />
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="row">
+            <div class="p-3 mb-3 d-flex flex-row-reverse">
+                <div class="p-2">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#addExpenseModal" id="addExpenseButton">
+                        <i class="bi bi-plus-circle"></i>
+                        Add Expense Item
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 text-md-end fs-5">
+                <strong>Total</strong>
+            </div>
+            <div class="col">
+                <div class="input-group mb-3">
+                    <span class="input-group-text">$</span>
+                    <input type="number" class="form-control" name="TotalPlannedExpenses" value="@Model.Budget.TotalExpenses" disabled />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addIncomeModal" tabindex="-1" aria-labelledby="addIncomeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addIncomeModalLabel">Add Income Item</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Add Income Item Form -->
+                        <div class="mb-3">
+                            <label for="incomeCategory" class="form-label">Category</label>
+                            <input type="text" class="form-control" id="incomeCategory" name="IncomeCategory" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="incomeAmount" class="form-label">Planned Amount</label>
+                            <input type="number" class="form-control" id="incomeAmount" name="PlannedAmount" />
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" asp-page-handler="AddIncomeItem">Add Income Item</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="addExpenseModal" tabindex="-1" aria-labelledby="addExpenseModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addExpenseModalLabel">Add Expense Item</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Add Expense Item Form -->
+                        <div class="mb-3">
+                            <label for="expenseCategory" class="form-label">Category</label>
+                            <input type="text" class="form-control" id="expenseCategory" name="ExpenseCategory" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="expenseAmount" class="form-label">Planned Amount</label>
+                            <input type="number" class="form-control" id="expenseAmount" name="PlannedAmount" />
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" asp-page-handler="AddExpenseItem">Add Expense Item</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
