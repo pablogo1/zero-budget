@@ -7,14 +7,14 @@ namespace ZeroBudget.Features.Budgets;
 public class CreateModel : PageModel
 {
     [BindProperty]
-    public BudgetHeader BudgetDefinition { get; set; } = default!;
+    public BudgetHeaderViewModel BudgetDefinition { get; set; } = default!;
     public string? ErrorMessage { get; set; } = null;
 
     public Month[] Months { get; } = Month.Months;
 
     public void OnGet()
     {
-        BudgetDefinition = new BudgetHeader();
+        BudgetDefinition = new BudgetHeaderViewModel();
     }
 
     public IActionResult OnPost()
@@ -35,7 +35,7 @@ public class CreateModel : PageModel
     }
 }
     
-public sealed class BudgetHeader
+public sealed class BudgetHeaderViewModel
 {
     [Required]
     [StringLength(100, ErrorMessage = "Name cannot be longer than 100 characters.")]
@@ -55,7 +55,7 @@ public sealed class BudgetHeader
     public int Year { get; set; } = DateTime.Today.Year;
 
 
-    public BudgetHeader()
+    public BudgetHeaderViewModel()
     {
         
     }

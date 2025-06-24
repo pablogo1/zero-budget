@@ -14,7 +14,7 @@ public partial class CreateModelTests
             // Arrange
             var model = new CreateModel
             {
-                BudgetDefinition = new BudgetHeader()
+                BudgetDefinition = new BudgetHeaderViewModel()
                 {
                     Name = "Test Budget"
                 }
@@ -35,7 +35,7 @@ public partial class CreateModelTests
             // Arrange
             var model = new CreateModel
             {
-                BudgetDefinition = new BudgetHeader()
+                BudgetDefinition = new BudgetHeaderViewModel()
                 {
                     Name = "#$@#__!$error"
                 }
