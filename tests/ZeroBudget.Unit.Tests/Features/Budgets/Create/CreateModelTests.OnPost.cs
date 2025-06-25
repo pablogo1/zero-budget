@@ -1,39 +1,44 @@
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Mvc;
 using Shouldly;
 using ZeroBudget.Features.Budgets;
+using ZeroBudget.Models;
 
 namespace ZeroBudget.Unit.Tests.Features.Budgets.Create;
 
 public partial class CreateModelTests
 {
-    public class OnPost
+    public class OnPost(BudgetDatabaseFixture fixture) : IClassFixture<BudgetDatabaseFixture>
     {
         [Fact]
-        public void Should_redirect_to_Details_when_given_valid_BudgetDefinition()
+        public async Task Should_redirect_to_Details_when_given_valid_BudgetDefinition()
         {
             // Arrange
-            var model = new CreateModel
+            const string budgetName = "Test Budget 123";
+            var model = new CreateModel(fixture.Context)
             {
                 BudgetDefinition = new BudgetHeaderViewModel()
                 {
-                    Name = "Test Budget"
+                    Name = budgetName
                 }
             };
 
             // Act
-            var pageResponse = model.OnPost();
+            var pageResponse = await model.OnPost();
 
             // Assert
             model.ErrorMessage.ShouldBeNull();
             pageResponse.ShouldBeAssignableTo<RedirectToPageResult>();
             (pageResponse as RedirectToPageResult)!.RouteValues.ShouldNotBeEmpty();
+            (pageResponse as RedirectToPageResult)!.RouteValues!.ShouldContainKey("id");
+            fixture.Context.Budgets.Where(b => b.Name == budgetName).ShouldNotBeEmpty();
         }
 
         [Fact]
-        public void Should_display_error_message_when_given_an_invalid_BudgetDefinition()
+        public async Task Should_display_error_message_when_given_an_invalid_BudgetDefinition()
         {
             // Arrange
-            var model = new CreateModel
+            var model = new CreateModel(fixture.Context)
             {
                 BudgetDefinition = new BudgetHeaderViewModel()
                 {
@@ -43,7 +48,7 @@ public partial class CreateModelTests
             model.ModelState.AddModelError("BudgetDefinition.Name", "Invalid name.");
 
             // Act
-            model.OnPost();
+            await model.OnPost();
 
             // Assert
             model.ErrorMessage.ShouldBe("Invalid budget definition.");

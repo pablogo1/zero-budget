@@ -1,11 +1,14 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using ZeroBudget.Data;
 
 namespace ZeroBudget.Features.Budgets;
 
-public class CreateModel : PageModel
+public class CreateModel(BudgetContext dbContext) : PageModel
 {
+    private readonly BudgetContext _dbContext = dbContext;
+
     [BindProperty]
     public BudgetHeaderViewModel BudgetDefinition { get; set; } = default!;
     public string? ErrorMessage { get; set; } = null;
@@ -17,7 +20,7 @@ public class CreateModel : PageModel
         BudgetDefinition = new BudgetHeaderViewModel();
     }
 
-    public IActionResult OnPost()
+    public async Task<IActionResult> OnPost()
     {
         if (!ModelState.IsValid)
         {
@@ -25,13 +28,17 @@ public class CreateModel : PageModel
             return Page();
         }
 
-        // ErrorMessage = "Test";
+        await Task.Yield();
 
-        // Save the budget to the database
+        Models.Budget budget = Models.Budget.Create(
+            BudgetDefinition.Name,
+            BudgetDefinition.Month,
+            BudgetDefinition.Year);
 
-        // Redirect to the budget details page
-        // return RedirectToPage("Details", new { id = budgetDefinition.Id });
-        return RedirectToPage("Details", new { id = 1 });
+        _dbContext.Budgets.Add(budget);
+        await _dbContext.SaveChangesAsync();
+
+        return RedirectToPage("Details", new { id = budget.Id });
     }
 }
     

@@ -1,17 +1,16 @@
-using Shouldly;
 using ZeroBudget.Features.Budgets;
 
 namespace ZeroBudget.Unit.Tests.Features.Budgets.Create;
 
 public partial class CreateModelTests
 {
-    public class OnGet
+    public class OnGet(BudgetDatabaseFixture fixture) : IClassFixture<BudgetDatabaseFixture>
     {
         [Fact]
         public void Should_return_page_with_empty_name()
         {
             // Arrange
-            var model = new CreateModel();
+            var model = new CreateModel(fixture.Context);
 
             // Act
             model.OnGet();
