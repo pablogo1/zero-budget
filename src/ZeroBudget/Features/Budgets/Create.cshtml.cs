@@ -38,7 +38,7 @@ public class CreateModel(BudgetContext dbContext) : PageModel
         _dbContext.Budgets.Add(budget);
         await _dbContext.SaveChangesAsync();
 
-        return RedirectToPage("Details", new { id = budget.Id });
+        return RedirectToPage("Edit", new { id = budget.Id });
     }
 }
     

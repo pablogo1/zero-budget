@@ -12,7 +12,7 @@ public partial class CreateModelTests
     public class OnPost(BudgetDatabaseFixture fixture)
     {
         [Fact]
-        public async Task Should_redirect_to_Details_when_given_valid_BudgetDefinition()
+        public async Task Should_redirect_to_Edit_when_given_valid_BudgetDefinition()
         {
             // Arrange
             const string budgetName = "Test Budget 123";
@@ -30,8 +30,10 @@ public partial class CreateModelTests
             // Assert
             model.ErrorMessage.ShouldBeNull();
             pageResponse.ShouldBeAssignableTo<RedirectToPageResult>();
-            (pageResponse as RedirectToPageResult)!.RouteValues.ShouldNotBeEmpty();
-            (pageResponse as RedirectToPageResult)!.RouteValues!.ShouldContainKey("id");
+            RedirectToPageResult redirectToPageResult = (pageResponse as RedirectToPageResult)!;
+            redirectToPageResult.PageName.ShouldBe("Edit");
+            redirectToPageResult.RouteValues.ShouldNotBeEmpty();
+            redirectToPageResult.RouteValues!.ShouldContainKey("id");
             fixture.Context.Budgets.Where(b => b.Name == budgetName).ShouldNotBeEmpty();
         }
 
