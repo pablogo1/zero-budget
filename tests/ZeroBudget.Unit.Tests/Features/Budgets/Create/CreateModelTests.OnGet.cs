@@ -4,7 +4,8 @@ namespace ZeroBudget.Unit.Tests.Features.Budgets.Create;
 
 public partial class CreateModelTests
 {
-    public class OnGet(BudgetDatabaseFixture fixture) : IClassFixture<BudgetDatabaseFixture>
+    [Collection("BudgetDatabase")]
+    public class OnGet(BudgetDatabaseFixture fixture)
     {
         [Fact]
         public void Should_return_page_with_empty_name()

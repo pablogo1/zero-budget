@@ -33,3 +33,7 @@ public sealed class BudgetDatabaseFixture : IDisposable
         _connection.Dispose();
     }
 }
+
+[CollectionDefinition("BudgetDatabase")]
+public sealed class BudgetDatabaseCollection : ICollectionFixture<BudgetDatabaseFixture>
+{}

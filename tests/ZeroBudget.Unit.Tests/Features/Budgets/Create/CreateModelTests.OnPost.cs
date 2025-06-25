@@ -8,7 +8,8 @@ namespace ZeroBudget.Unit.Tests.Features.Budgets.Create;
 
 public partial class CreateModelTests
 {
-    public class OnPost(BudgetDatabaseFixture fixture) : IClassFixture<BudgetDatabaseFixture>
+    [Collection("BudgetDatabase")]
+    public class OnPost(BudgetDatabaseFixture fixture)
     {
         [Fact]
         public async Task Should_redirect_to_Details_when_given_valid_BudgetDefinition()
