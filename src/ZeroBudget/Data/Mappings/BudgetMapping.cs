@@ -12,6 +12,12 @@ public class BudgetMapping : IEntityTypeConfiguration<Models.Budget>
         builder.ToTable("budgets");
 
         builder.HasKey(b => b.Id);
+        builder.Property(b => b.Key)
+            .IsRequired()
+            .HasMaxLength(200)
+            .HasColumnName("key");
+        builder.HasIndex(b => b.Key)
+            .IsUnique();
         builder.Property(b => b.Name)
             .IsRequired()
             .HasMaxLength(100)

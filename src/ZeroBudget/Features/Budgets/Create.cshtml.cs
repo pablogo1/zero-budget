@@ -32,6 +32,7 @@ public class CreateModel(BudgetContext dbContext) : PageModel
 
         Models.Budget budget = Models.Budget.Create(
             BudgetDefinition.Name,
+            "budget_" + BudgetDefinition.Name.ToLower().Replace(" ", "_") + "_",
             BudgetDefinition.Month,
             BudgetDefinition.Year);
 
